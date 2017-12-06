@@ -29,6 +29,6 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.build = function(ticket, optionsObservee, api){
-		
+		this.add(Text('testing'))
 	}
 }))

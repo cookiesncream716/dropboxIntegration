@@ -1,4 +1,7 @@
 'use strict'
+var Dropbox = require('dropbox')
+// var dotenv = require('dotenv')
+// require('dotenv').load()
 
 registerPlugin(proto(Gem, function(){
 	this.name = 'DropboxIntegration'
@@ -29,6 +32,23 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.build = function(ticket, optionsObservee, api){
-		this.add(Text('testing'))
+		this.ticket = ticket
+		this.optionsObservee = optionsObservee
+		this.api = api
+		this.atttachmentsField = optionsObservee.subject.atttachmentsField
+
+		this.documents = Table()
+
+		var dbx = new Dropbox({accessToken: ''});
+		dbx.filesListFolder({path: ''})
+		  .then(function(response) {
+		    console.log(response);
+		  })
+		  .catch(function(error) {
+		    console.log(error);
+		  });
+		console.log('dropbox ', dbx)
+
+		this.add(Text('file', 'Add a file'), Text('folder', 'Add a folder'))
 	}
 }))

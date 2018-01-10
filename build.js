@@ -1,6 +1,6 @@
 var build = require('build-modules')
 // var emitter = build(__dirname+'/rootDirectory/moduleName', {output:{path: __dirname+'/generatedFile/'}})
-var emitter = build(__dirname + '/dropbox.js', {
+var emitter = build(__dirname + '/dropboxIntegration.js', {
 	output: {path: __dirname},
 	minify: false,
 	sourceMap: false,

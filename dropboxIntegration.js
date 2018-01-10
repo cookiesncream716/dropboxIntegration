@@ -1,5 +1,5 @@
 'use strict'
-var Dropbox = require('dropbox')
+var Dropbox2 = require('dropbox')
 // var dotenv = require('dotenv')
 // require('dotenv').load()
 
@@ -33,7 +33,7 @@ registerPlugin(proto(Gem, function(){
 		// var dropboxButton = Button()
 		var test = Button('dropbox')
 		var button = Dropbox.createChooseButton(buttonOptions)
-		// var addButton = Doopbox.choose(buttonOptions)
+		// var button = Doopbox.choose(buttonOptions)
 
 		// this.add(test, this.filesContainer)
 		this.add(button, this.filesContainer)

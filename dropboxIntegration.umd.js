@@ -2246,7 +2246,7 @@ module.exports = httpHeaderSafeJson;
 
 "use strict";
 
-var Dropbox = __webpack_require__(/*! dropbox */ 6)
+var Dropbox2 = __webpack_require__(/*! dropbox */ 6)
 // var dotenv = require('dotenv')
 // require('dotenv').load()
 
@@ -2280,7 +2280,7 @@ registerPlugin(proto(Gem, function(){
 		// var dropboxButton = Button()
 		var test = Button('dropbox')
 		var button = Dropbox.createChooseButton(buttonOptions)
-		// var addButton = Doopbox.choose(buttonOptions)
+		// var button = Doopbox.choose(buttonOptions)
 
 		// this.add(test, this.filesContainer)
 		this.add(button, this.filesContainer)

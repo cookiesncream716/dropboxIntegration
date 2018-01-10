@@ -2247,8 +2247,11 @@ module.exports = httpHeaderSafeJson;
 "use strict";
 
 var Dropbox2 = __webpack_require__(/*! dropbox */ 6)
+// var Dropbox3 = require('./dropboxScript')
 // var dotenv = require('dotenv')
 // require('dotenv').load()
+
+// Dropbox3.createScriptTag()
 
 // add script tag for Dropbox Chooser
 var st = document.createElement('script')
@@ -2257,6 +2260,53 @@ st.setAttribute('src', 'https://www.dropbox.com/static/api/2/dropins.js')
 st.setAttribute('id', 'dropboxjs')
 st.setAttribute('data-app-key', 'by8mb3vsys1a607')
 document.head.appendChild(st)
+
+function fireWhenReady(){
+	if(typeof Dropbox.createChooseButton != 'undefined'){
+		console.log('defined')
+	}else{
+		setTimeout(fireWhenReady, 100)
+	}
+}
+$(document).ready(fireWhenReady)
+
+// function loadScript(path, callback){
+// 	var done = false
+// 	var scr = document.createElement('script')
+
+// 	scr.onload = handleLoad()
+// 	scr.onReadyStateChange = handleReadyStateChange()
+// 	scr.onerror = handleError()
+// 	scr.src = 'https://www.dropbox.com/static/api/2/dropins.js'
+// 	// scr.type = 'text/javascript'
+// 	// scr.id = 'dropboxjs'
+// 	// scr.data-app-key = 'by8mb3vsys1a607'
+// 	document.body.appendChild(scr)
+
+// 	function handleLoad(){
+// 		if(!done){
+// 			done = true
+// 			callback('https://www.dropbox.com/static/api/2/dropins.js', 'ok')
+// 		}
+// 	}
+// 	function handleReadyStateChange(){
+// 		var state
+// 		if(!done){
+// 			state = scr.readyState
+// 			if(state === 'complete'){
+// 				handleLoad()
+// 			}
+// 		}
+// 	}
+// 	function handleError(){
+// 		if(!done){
+// 			done = true
+// 			callback('https://www.dropbox.com/static/api/2/dropins.js', 'error')
+// 		}
+// 	}
+// }
+
+// loadScript()
 
 registerPlugin(proto(Gem, function(){
 	this.name = 'DropboxIntegration'

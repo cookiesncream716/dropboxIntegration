@@ -2254,21 +2254,21 @@ var Dropbox2 = __webpack_require__(/*! dropbox */ 6)
 // Dropbox3.createScriptTag()
 
 // add script tag for Dropbox Chooser
-var st = document.createElement('script')
-st.setAttribute('type', 'text/javascript')
-st.setAttribute('src', 'https://www.dropbox.com/static/api/2/dropins.js')
-st.setAttribute('id', 'dropboxjs')
-st.setAttribute('data-app-key', 'by8mb3vsys1a607')
-document.head.appendChild(st)
+// var st = document.createElement('script')
+// st.setAttribute('type', 'text/javascript')
+// st.setAttribute('src', 'https://www.dropbox.com/static/api/2/dropins.js')
+// st.setAttribute('id', 'dropboxjs')
+// st.setAttribute('data-app-key', 'by8mb3vsys1a607')
+// document.head.appendChild(st)
 
-function fireWhenReady(){
-	if(typeof Dropbox.createChooseButton != 'undefined'){
-		console.log('defined')
-	}else{
-		setTimeout(fireWhenReady, 100)
-	}
-}
-$(document).ready(fireWhenReady)
+// function fireWhenReady(){
+// 	if(typeof Dropbox.createChooseButton != 'undefined'){
+// 		console.log('defined')
+// 	}else{
+// 		setTimeout(fireWhenReady, 100)
+// 	}
+// }
+// $(document).ready(fireWhenReady)
 
 // function loadScript(path, callback){
 // 	var done = false
@@ -2315,6 +2315,7 @@ registerPlugin(proto(Gem, function(){
 		this.filesContainer = List()
 		var buttonOptions = {
 			success: function(files){
+				console.log('success ', files)
 				files.forEach(function(file){
 					// this.addToList(file)
 					this.filesContainer.item(file)
@@ -2328,8 +2329,9 @@ registerPlugin(proto(Gem, function(){
 			folderSelect: true			
 		}
 		// var dropboxButton = Button()
-		var test = Button('dropbox')
-		var button = Dropbox.createChooseButton(buttonOptions)
+		var button = Button('dropbox')
+		button.domNode = Dropbox.createChooseButton(buttonOptions)
+		// var button = Dropbox.createChooseButton(buttonOptions)
 		// var button = Doopbox.choose(buttonOptions)
 
 		// this.add(test, this.filesContainer)

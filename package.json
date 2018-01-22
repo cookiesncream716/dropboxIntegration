@@ -2,8 +2,7 @@
   "name": "dropboxIntegretion",
   "description": "plugin for Tixit so users can add files/folders from Dropbox to a ticket",
   "dependencies": {
-    "build-modules": "^2.2.0",
-    "dropbox": "^2.5.12"
+    "build-modules": "^2.2.0"
   },
   "devDependencies": {}
 }

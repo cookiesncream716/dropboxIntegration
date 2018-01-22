@@ -4,16 +4,14 @@
 	</head>
 	<body></body>
 	<script src="https://tixit.me/PluginTester.umd.js"></script>
-	<script src="dropbox.umd.js"></script>
-	<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="by8mb3vsys1a607"></script>
+	<!-- <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="by8mb3vsys1a607"></script> -->
+	<script src="dropboxIntegration.js"></script>
 
 	<script>
 		PluginTester.Api.Ticket.create().then(function(testTicket){
+			testTicket.subject.filesList = [{name: 'Cat Picture', link: 'http://www.tridanim.com/free-cat-picture_free-cat_8.html'}, {name: 'Picture of Dog', link: 'https://imgur.com/gallery/KGk9F'}]
 
-			PluginTester('DropboxIntegration', {}, {ticketId: testTicket.subject._id, showEditor: true})
+			PluginTester('DropboxIntegration', {filesListField: 'filesList', subfields: {nameField: 'name', linkField: 'link'}}, {ticketId: testTicket.subject._id, showEditor: true})
 		}).done()
    	</script>
 </html>
-
-<!-- url after click on Add a file -->
-<!-- https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=by8mb3vsys1a607&redirect_uri=file:///Users/heather/tixit/dropboxIntegration/dropbox.html -->

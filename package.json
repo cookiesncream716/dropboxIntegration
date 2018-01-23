@@ -1,8 +1,10 @@
 {
   "name": "dropboxIntegretion",
-  "description": "plugin for Tixit so users can add files/folders from Dropbox to a ticket",
-  "dependencies": {
-    "build-modules": "^2.2.0"
-  },
-  "devDependencies": {}
+  "version": "1.0.0",
+  "description": "A Tixit plugin that allows users to add files from Dropbox to a ticket.",
+  "keywords": ["tixit", "plugin", "dropbox"],
+  "repository": {
+  	"type": "git",
+  	"url": "github.com/cookiesncream716/dropboxIntegration/blob/master/dropboxIntegration.js"
+  }
 }

@@ -1,23 +1,10 @@
 'use strict'
 
 registerPlugin(proto(Gem, function(){
-	function loadDropboxScript(){
-		var f = new Future
-		var st = document.createElement('script')
-		st.setAttribute('type', 'text/javascript')
-		st.setAttribute('src', 'https://www.dropbox.com/static/api/2/dropins.js')
-		st.setAttribute('id', 'dropboxjs')
-		st.setAttribute('data-app-key', 'by8mb3vsys1a607')
-		document.head.appendChild(st)
-		st.onload = function(){
-			f.return()
-		}
-		return f
-	}
-
 	this.name = 'DropboxIntegration'
 
 	this.initialize = function(options){
+		console.log('initialize')
 		return {
 			filesListField: 'filesList',
 			subfields: {
@@ -28,6 +15,7 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.requireFields = function(options){
+		console.log('requireFields')
 		var ticketFields = {}
 		var filesListSubfields = {}
 		ticketFields[options.filesListField] = {
@@ -40,48 +28,73 @@ registerPlugin(proto(Gem, function(){
 		return ticketFields
 	}
 
+	function loadDropboxScript(){
+		var f = new Future
+		var scriptTag = document.createElement('script')
+		scriptTag.setAttribute('type', 'text/javascript')
+		scriptTag.setAttribute('src', 'https://www.dropbox.com/static/api/2/dropins.js')
+		scriptTag.setAttribute('id', 'dropboxjs')
+		scriptTag.setAttribute('data-app-key', 'by8mb3vsys1a607')
+		document.head.appendChild(scriptTag)
+		scriptTag.onload = function(){
+			console.log('loaded script')
+			f.return()
+		}
+		return f
+	}
+
 	this.build = function(ticket, optionsObservee, api){
+		console.log('build')
 		var that = this
 		this.ticket = ticket
+		this.optionsObservee = optionsObservee
 		this.filesListField = optionsObservee.subject.filesListField
 
-		loadDropboxScript().then(function(){
-			that.filesTable = Table()
+		if(window.Dropbox){
+			console.log('aleady loaded')
+			this.create()
+		}else{
+			console.log('not loaded')
+			loadDropboxScript().then(function(){
+				that.create()
+			}).done()
+		}
+	}
 
-			var buttonOptions = {
-				success: function(files){
-					console.log('files ', files)
-					// save it to the ticket 
-					files.forEach(function(file){
-						var fields = optionsObservee.subject
-						var data = {}
-						data[fields.subfields.nameField] = file.name
-						data[fields.subfields.linkField] = file.link
-						ticket.get(that.filesListField).push(data)
-					})
-				},
-				cancel: function(){
+	this.create = function(){
+		var that = this
+		this. filesTable = Table()
+		var buttonOptions = {
+			success: function(files){
+				// save it to the ticket
+				files.forEach(function(file){
+					var fields = that.optionsObservee.subject
+					var data = {}
+					data[fields.subfields.nameField] = file.name
+					data[fields.subfields.linkField] = file.link
+					that.ticket.get(that.filesListField).push(data)
+				})
+			},
+			cancel: function(){
 
-				},
-				linkType: 'preview',
-				multiselect: true,
-				folderSelect: true			
-			}
-			var button = Button()
-			button.domNode = Dropbox.createChooseButton(buttonOptions)
-					
-			if(ticket.get(that.filesListField).subject.length > 0){
-				that.createTable()
-			}
+			},
+			linkType: 'preview',
+			multiselect: true,
+			folderSelect: true
+		}
+		var button = Button()
+		button.domNode = Dropbox.createChooseButton(buttonOptions)
 
-			that.add(button, that.filesTable)
+		if(this.ticket.get(that.filesListField).subject.length > 0){
+			that.createTable()
+		}
 
-			// update the table when a file is added or removed
-			ticket.get(that.filesListField).on('change', function(){
-				that.createTable()
-			})
+		that.add(button, this.filesTable)
 
-		}).done()
+		// update table when file is added or removed
+		this.ticket.get(this.filesListField).on('change', function(){
+			that.createTable()
+		})
 	}
 
 	this.createTable = function(){
@@ -90,21 +103,24 @@ registerPlugin(proto(Gem, function(){
 		this.filesTable.remove(this.filesTable.children) // creates new table rather than adding to existing table and getting repeats
 		var rows = this.ticket.get(this.filesListField).subject
 		rows.forEach(function(data, i){
-			var linkCell = Text('link', data.link)
+			var nameCell = Text('link', data.name)
+			// var linkCell = Text('link', data.link)
 			var delButton = Button('Remove')
-			that.filesTable.row([Text(data.name), linkCell, delButton])
-			linkCell.on('click', function(){
-				window.open(linkCell.text)
+			that.filesTable.row([nameCell, delButton])
+			// linkCell.on('click', function(){
+			// 	window.open(linkCell.text)
+			// })
+			nameCell.on('click', function(){
+				window.open(data.link)
 			})
 			delButton.on('click', function(){
-				console.log('clicked delete index ' + i + ' ' + linkCell.text)
+				console.log('clicked delete index ' + i + ' ' + data.link)
 				that.ticket.get(that.filesListField).splice(i, 1)
 			})
 		})
 	}
 
 	this.getStyle = function(){
-		console.log('getStyle')
 		return Style({
 			$link: {
 				color: 'rgb(52, 152, 219)'

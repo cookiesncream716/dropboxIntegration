@@ -4,7 +4,6 @@ registerPlugin(proto(Gem, function(){
 	this.name = 'DropboxIntegration'
 
 	this.initialize = function(options){
-		console.log('initialize')
 		return {
 			filesListField: 'filesList',
 			subfields: {
@@ -15,7 +14,6 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.requireFields = function(options){
-		console.log('requireFields')
 		var ticketFields = {}
 		var filesListSubfields = {}
 		ticketFields[options.filesListField] = {
@@ -37,24 +35,23 @@ registerPlugin(proto(Gem, function(){
 		scriptTag.setAttribute('data-app-key', 'by8mb3vsys1a607')
 		document.head.appendChild(scriptTag)
 		scriptTag.onload = function(){
-			console.log('loaded script')
+			// console.log('loaded script')
 			f.return()
 		}
 		return f
 	}
 
 	this.build = function(ticket, optionsObservee, api){
-		console.log('build')
 		var that = this
 		this.ticket = ticket
 		this.optionsObservee = optionsObservee
 		this.filesListField = optionsObservee.subject.filesListField
 
 		if(window.Dropbox){
-			console.log('aleady loaded')
+			// console.log('aleady loaded')
 			this.create()
 		}else{
-			console.log('not loaded')
+			// console.log('not loaded')
 			loadDropboxScript().then(function(){
 				that.create()
 			}).done()
@@ -98,7 +95,6 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.createTable = function(){
-		console.log('create Table')
 		var that = this
 		this.filesTable.remove(this.filesTable.children) // creates new table rather than adding to existing table and getting repeats
 		var rows = this.ticket.get(this.filesListField).subject
@@ -114,7 +110,6 @@ registerPlugin(proto(Gem, function(){
 				window.open(data.link)
 			})
 			delButton.on('click', function(){
-				console.log('clicked delete index ' + i + ' ' + data.link)
 				that.ticket.get(that.filesListField).splice(i, 1)
 			})
 		})

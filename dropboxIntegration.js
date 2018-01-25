@@ -86,7 +86,8 @@ registerPlugin(proto(Gem, function(){
 			that.createTable()
 		}
 
-		that.add(button, this.filesTable)
+		var block = Block(button, this.filesTable)
+		that.add(block)
 
 		// update table when file is added or removed
 		this.ticket.get(this.filesListField).on('change', function(){
@@ -117,6 +118,9 @@ registerPlugin(proto(Gem, function(){
 
 	this.getStyle = function(){
 		return Style({
+			Block: {
+				padding: 10
+			},
 			$link: {
 				color: 'rgb(52, 152, 219)'
 			},
@@ -124,7 +128,7 @@ registerPlugin(proto(Gem, function(){
 				display: 'block',
 				marginTop: 15,
 				TableCell: {
-					minWidth: 125,
+					minWidth: 250,
 					$$lastChild: {
 						paddingLeft: 10
 					}

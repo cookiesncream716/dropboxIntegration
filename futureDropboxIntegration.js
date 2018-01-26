@@ -1,7 +1,5 @@
 'use strict'
 
-// var loaded = false
-
 var scriptLoaded = new Promise(function(resolve){
 	var scriptTag = document.createElement('script')
 	scriptTag.setAttribute('type', 'text/javascript')
@@ -10,21 +8,15 @@ var scriptLoaded = new Promise(function(resolve){
 	scriptTag.setAttribute('data-app-key', 'by8mb3vsys1a607')
 	document.head.appendChild(scriptTag)
 	scriptTag.onload = function(){
-		console.log('loaded script')
-		// loaded = true
+		// console.log('loaded script')
 		resolve()
 	}
-	// return f
-	// if(loaded === true){
-	// 	resolved(loaded)
-	// }
 })
 
 registerPlugin(proto(Gem, function(){
 	this.name = 'DropboxIntegration'
 
 	this.initialize = function(options){
-		console.log('initialize')
 		return {
 			filesListField: 'filesList',
 			subfields: {
@@ -35,7 +27,6 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.requireFields = function(options){
-		console.log('requireFields')
 		var ticketFields = {}
 		var filesListSubfields = {}
 		ticketFields[options.filesListField] = {
@@ -49,18 +40,14 @@ registerPlugin(proto(Gem, function(){
 	}
 
 	this.build = function(ticket, optionsObservee, api){
-		console.log('build')
 		var that = this
 		this.ticket = ticket
 		this.filesListField = optionsObservee.subject.filesListField
 
 		scriptLoaded.then(function(){
-			console.log('then')
 			that.filesTable = Table()
-
 			var buttonOptions = {
 				success: function(files){
-					console.log('files ', files)
 					// save it to the ticket 
 					files.forEach(function(file){
 						var fields = optionsObservee.subject
@@ -84,18 +71,19 @@ registerPlugin(proto(Gem, function(){
 				that.createTable()
 			}
 
-			that.add(button, that.filesTable)
+			var block = Block(button, this.filesTable)
+			that.add(block)
 
 			// update the table when a file is added or removed
 			ticket.get(that.filesListField).on('change', function(){
 				that.createTable()
 			})
 
-		}) // if I add .done(), I get an error: "TypeError: scriptLoaded.then(...).done is not a function"
+		}) 
 	}
 
 	this.createTable = function(){
-		console.log('create Table')
+		// console.log('create Table')
 		var that = this
 		this.filesTable.remove(this.filesTable.children) // creates new table rather than adding to existing table and getting repeats
 		var rows = this.ticket.get(this.filesListField).subject
@@ -119,6 +107,9 @@ registerPlugin(proto(Gem, function(){
 
 	this.getStyle = function(){
 		return Style({
+			Block: {
+				padding: 10
+			},
 			$link: {
 				color: 'rgb(52, 152, 219)'
 			},
